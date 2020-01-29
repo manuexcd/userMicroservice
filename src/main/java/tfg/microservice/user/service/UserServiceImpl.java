@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,9 @@ import tfg.microservice.user.repository.UserRepository;
 
 @Service("userManager")
 public class UserServiceImpl implements UserService {
+
+	@Autowired
+	private DiscoveryClient discoveryClient;
 
 	@Autowired
 	private UserRepository repository;
