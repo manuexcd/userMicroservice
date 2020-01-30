@@ -13,7 +13,7 @@ public final class Constants {
 	public static final String PATH_ORDERLINES = "/orderLines";
 	public static final String PATH_EMAIL = "/email";
 	public static final String PATH_SEARCH = "/search";
-	public static final String PATH_SIGN_IN = "/signin";
+	public static final String PATH_REGISTER = "/register";
 	public static final String PATH_LOGIN_DETAILS = "/logindetails";
 
 	public static final String PARAM_ID = "/{id}";

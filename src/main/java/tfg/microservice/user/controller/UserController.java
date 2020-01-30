@@ -115,7 +115,7 @@ public class UserController {
 //		}
 //	}
 
-	@PostMapping(value = Constants.PATH_SIGN_IN)
+	@PostMapping(value = Constants.PATH_REGISTER)
 	public ResponseEntity<UserDTO> registerUserAccount(@RequestBody UserDTO dto) {
 		User registered = null;
 		try {

@@ -23,3 +23,10 @@ spring:
       url: jdbc:mysql://localhost:3306/userMicroservice?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       username: tfg
       password: tfg
+server:
+   port: 8080
+   ssl:
+      enabled: false
+      key-password: password
+      key-store: classpath:keystore.jks
+      key-store-password: password
