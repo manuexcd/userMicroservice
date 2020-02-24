@@ -34,12 +34,6 @@ public class UserController {
 	@Autowired
 	private UserMapper mapper;
 
-//	@Autowired
-//	private OrderMapper orderMapper;
-//
-//	@Autowired
-//	private OrderService orderService;
-
 	@GetMapping
 	public ResponseEntity<Page<UserDTO>> getAllUsers(
 			@RequestParam(defaultValue = Constants.PAGINATION_DEFAULT_PAGE) int page,
@@ -70,50 +64,6 @@ public class UserController {
 				mapper.mapEntityPageToDtoPage(userService.getUsersByParam(param, PageRequest.of(page, pageSize))),
 				HttpStatus.OK);
 	}
-
-//	@GetMapping(value = Constants.PARAM_ID + Constants.PATH_ORDERS)
-//	public ResponseEntity<Page<OrderDTO>> getOrdersByUser(@PathVariable long id,
-//			@RequestParam(defaultValue = Constants.PAGINATION_DEFAULT_PAGE) int page,
-//			@RequestParam(defaultValue = Constants.PAGINATION_DEFAULT_SIZE) int pageSize) {
-//		try {
-//			return new ResponseEntity<>(orderMapper.mapEntityPageToDtoPage(
-//					orderService.getOrdersByUser(id, PageRequest.of(page, pageSize))), HttpStatus.OK);
-//		} catch (UserNotFoundException e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	@PostMapping(value = Constants.PARAM_ID + Constants.PATH_ORDERS)
-//	public ResponseEntity<OrderDTO> createTemporalOrder(@PathVariable long id, @RequestBody OrderDTO dto) {
-//		try {
-//			return new ResponseEntity<>(
-//					orderMapper.mapEntityToDto(userService.createTemporalOrder(id, orderMapper.mapDtoToEntity(dto))),
-//					HttpStatus.OK);
-//		} catch (UserNotFoundException e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	@PutMapping(value = Constants.PARAM_ID + Constants.PATH_ORDERS)
-//	public ResponseEntity<OrderDTO> updateOrder(@PathVariable long id, @RequestBody OrderDTO dto) {
-//		try {
-//			return new ResponseEntity<>(
-//					orderMapper.mapEntityToDto(userService.updateOrder(id, orderMapper.mapDtoToEntity(dto))),
-//					HttpStatus.CREATED);
-//		} catch (UserNotFoundException e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	@PutMapping(value = Constants.PARAM_ID + Constants.PATH_ORDERS + "/cancel" + Constants.PARAM_ORDER_ID)
-//	public ResponseEntity<OrderDTO> cancelOrder(@PathVariable long id, @PathVariable long orderId) {
-//		try {
-//			return new ResponseEntity<>(orderMapper.mapEntityToDto(userService.cancelOrder(id, orderId)),
-//					HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
 
 	@PostMapping(value = Constants.PATH_REGISTER)
 	public ResponseEntity<UserDTO> registerUserAccount(@RequestBody UserDTO dto) {

@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,13 +23,7 @@ import tfg.microservice.user.repository.UserRepository;
 public class UserServiceImpl implements UserService {
 
 	@Autowired
-	private DiscoveryClient discoveryClient;
-
-	@Autowired
 	private UserRepository repository;
-
-//	@Autowired
-//	private OrderService orderService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -67,44 +60,6 @@ public class UserServiceImpl implements UserService {
 	public Page<User> getAllUsers(Pageable pagination) {
 		return repository.findByOrderByName(pagination);
 	}
-
-//	@Override
-//	public Collection<Order> getOrders(long id) throws UserNotFoundException {
-//		return repository.findById(id).map(User::getOrders).orElseThrow(UserNotFoundException::new);
-//	}
-
-//	@Override
-//	public Order createTemporalOrder(long id, Order order) throws UserNotFoundException {
-//		Optional<User> user = repository.findById(id);
-//		if (user.isPresent()) {
-//			order.setOrderStatus(Constants.ORDER_STATUS_TEMPORAL);
-//			order.setUser(user.get());
-//			return orderService.createTemporalOrder(order);
-//		} else {
-//			throw new UserNotFoundException();
-//		}
-//	}
-//
-//	@Override
-//	public Order updateOrder(long id, Order order) throws UserNotFoundException {
-//		Optional<User> user = repository.findById(id);
-//		if (user.isPresent()) {
-//			order.setUser(user.get());
-//			return orderService.updateOrder(order);
-//		} else {
-//			throw new UserNotFoundException();
-//		}
-//	}
-//
-//	@Override
-//	public Order cancelOrder(long id, long orderId) throws UserNotFoundException, OrderNotFoundException {
-//		Optional<User> user = repository.findById(id);
-//		if (user.isPresent()) {
-//			return orderService.cancelOrder(orderId);
-//		} else {
-//			throw new UserNotFoundException();
-//		}
-//	}
 
 	@Override
 	public User getUser(long id) throws UserNotFoundException {

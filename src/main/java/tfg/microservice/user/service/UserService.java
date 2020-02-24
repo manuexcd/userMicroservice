@@ -12,19 +12,11 @@ public interface UserService {
 
 	public Page<User> getAllUsers(Pageable pagination);
 
-	// public Collection<Order> getOrders(long id) throws UserNotFoundException;
-
 	public User getUser(long id) throws UserNotFoundException;
 
 	public User getUserByEmail(String email);
 
 	public Page<User> getUsersByParam(String param, Pageable pagination);
-
-//	public Order createTemporalOrder(long id, Order order) throws UserNotFoundException;
-//
-//	public Order updateOrder(long id, Order order) throws UserNotFoundException;
-//
-//	public Order cancelOrder(long id, long orderId) throws UserNotFoundException, OrderNotFoundException;
 
 	public void deleteUser(long id);
 
