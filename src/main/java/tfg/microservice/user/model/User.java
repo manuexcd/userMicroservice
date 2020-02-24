@@ -49,10 +49,8 @@ public class User implements Serializable {
 	private String email;
 	@Column(unique = false, nullable = false, length = 1000)
 	private String password;
-//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//	private List<Order> orders;
-//	@OneToOne
-//	private Image userImage;
+	@Column(unique = false, nullable = true)
+	private Integer imageId;
 	@ElementCollection(fetch = FetchType.LAZY)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<String> roles = Arrays.asList("USER");
@@ -74,16 +72,17 @@ public class User implements Serializable {
 		this.setPassword(new BCryptPasswordEncoder().encode(password));
 	}
 
-//	public User(String name, String surname, String address, String phone, String email, String password, Image image) {
-//		super();
-//		this.setName(name);
-//		this.setSurname(surname);
-//		this.setAddress(address);
-//		this.setPhone(phone);
-//		this.setEmail(email);
-//		this.setPassword(new BCryptPasswordEncoder().encode(password));
-//		this.setUserImage(image);
-//	}
+	public User(String name, String surname, String address, String phone, String email, String password,
+			Integer imageId) {
+		super();
+		this.setName(name);
+		this.setSurname(surname);
+		this.setAddress(address);
+		this.setPhone(phone);
+		this.setEmail(email);
+		this.setPassword(new BCryptPasswordEncoder().encode(password));
+		this.setImageId(imageId);
+	}
 
 	public String getFullName() {
 		return this.name.concat(" ").concat(this.surname);
