@@ -1,6 +1,6 @@
 spring:
    application:
-      name: tfg
+      name: userMicroservice
    mail:
       host: smtp.gmail.com
       port: 587
@@ -20,7 +20,7 @@ spring:
          ddl-auto: update
          dialect: org.hibernate.dialect.MySQL5Dialect
    datasource:
-      url: jdbc:mysql://localhost:3306/userMicroservice?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/user_microservice?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
       username: tfg
       password: tfg
 server:
