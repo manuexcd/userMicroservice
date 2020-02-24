@@ -77,7 +77,7 @@ public class UserController {
 		return new ResponseEntity<>(mapper.mapEntityToDto(registered), HttpStatus.CREATED);
 	}
 
-	@PostMapping(value = "/confirm/{id}")
+	@PostMapping(value = Constants.PATH_CONFIRM + Constants.PARAM_ID)
 	public ResponseEntity<UserDTO> confirmUser(@PathVariable long id) {
 		try {
 			return new ResponseEntity<>(mapper.mapEntityToDto(userService.confirmUser(id)), HttpStatus.OK);
@@ -86,7 +86,7 @@ public class UserController {
 		}
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = Constants.PARAM_ID)
 	public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO dto) {
 		try {
 			userService.getUser(dto.getId());
