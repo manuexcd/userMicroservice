@@ -1,5 +1,10 @@
 package tfg.microservice.user.service;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +16,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.auth.Credentials;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.storage.Acl;
+import com.google.cloud.storage.Acl.Role;
+import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 
 import tfg.microservice.user.exception.EmailExistsException;
 import tfg.microservice.user.exception.UserNotFoundException;
@@ -112,5 +126,30 @@ public class UserServiceImpl implements UserService {
 		} else {
 			throw new UserNotFoundException();
 		}
+	}
+
+	@Override
+	public String addImage(MultipartFile file) {
+		try {
+			return uploadFile(file, Constants.GOOGLE_CLOUD_BUCKET_NAME);
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public String uploadFile(MultipartFile file, final String bucketName) throws IOException {
+		Credentials credentials = GoogleCredentials.fromStream(
+				new FileInputStream(new File("src/main/resources/tfg-kubernetes-250608-a841bb3c5abe.json")));
+
+		Storage storage = StorageOptions.newBuilder().setCredentials(credentials)
+				.setProjectId(Constants.GOOGLE_CLOUD_PROJECT_ID).build().getService();
+
+		BlobInfo blobInfo = storage.create(BlobInfo.newBuilder(bucketName, file.getName())
+				.setAcl(new ArrayList<>(
+						Collections.singletonList(Acl.of(com.google.cloud.storage.Acl.User.ofAllUsers(), Role.READER))))
+				.build(), file.getInputStream());
+
+		return blobInfo.getMediaLink();
 	}
 }

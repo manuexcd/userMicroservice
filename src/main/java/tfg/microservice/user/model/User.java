@@ -50,7 +50,7 @@ public class User implements Serializable {
 	@Column(unique = false, nullable = false, length = 1000)
 	private String password;
 	@Column(unique = false, nullable = true)
-	private Integer imageId;
+	private String imageUrl;
 	@ElementCollection(fetch = FetchType.LAZY)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<String> roles = Arrays.asList("USER");
@@ -73,7 +73,7 @@ public class User implements Serializable {
 	}
 
 	public User(String name, String surname, String address, String phone, String email, String password,
-			Integer imageId) {
+			String imageUrl) {
 		super();
 		this.setName(name);
 		this.setSurname(surname);
@@ -81,7 +81,7 @@ public class User implements Serializable {
 		this.setPhone(phone);
 		this.setEmail(email);
 		this.setPassword(new BCryptPasswordEncoder().encode(password));
-		this.setImageId(imageId);
+		this.setImageUrl(imageUrl);
 	}
 
 	public String getFullName() {

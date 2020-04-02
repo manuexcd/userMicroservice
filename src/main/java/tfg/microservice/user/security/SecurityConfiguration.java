@@ -31,6 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/users/**").authenticated();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/login").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/users/register").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/users/image").permitAll();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager()));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager()));
 	}

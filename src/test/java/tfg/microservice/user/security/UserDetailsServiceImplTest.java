@@ -26,14 +26,14 @@ public class UserDetailsServiceImplTest {
 
 	@Test
 	public void testLoadUserByUsername() throws EmailExistsException {
-		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", 1);
+		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", "url");
 		given(dao.findByEmail(anyString())).willReturn(user);
 		assertNotNull(service.loadUserByUsername(user.getEmail()));
 	}
 
 	@Test(expected = UsernameNotFoundException.class)
 	public void testLoadUserByUsernameNull() throws EmailExistsException {
-		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", 1);
+		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", "url");
 		given(dao.findByEmail(anyString())).willReturn(null);
 		assertNotNull(service.loadUserByUsername(user.getEmail()));
 	}

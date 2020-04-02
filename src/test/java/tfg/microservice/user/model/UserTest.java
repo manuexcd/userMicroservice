@@ -23,7 +23,7 @@ public class UserTest {
 	
 	@Test
 	public void constructor3() {
-		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", 1);
+		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", "url");
 		assertNotNull(user);
 	}
 
