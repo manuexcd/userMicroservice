@@ -30,3 +30,9 @@ server:
       key-password: password
       key-store: classpath:keystore.jks
       key-store-password: password
+google:
+   project-id: "tfg-kubernetes-250608"
+   bucket-name: "tfg-images"
+   credentials:
+      path: "src/main/resources/google-credentials.json"
+      

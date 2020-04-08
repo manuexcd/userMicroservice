@@ -3,8 +3,6 @@ package tfg.microservice.user.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +10,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Acl;
-import com.google.cloud.storage.Acl.Role;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
@@ -44,6 +43,15 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private MailSender mailSender;
+
+	@Value("${google.credentials.path}")
+	private String credentialsPath;
+
+	@Value("${google.project-id}")
+	private String projectId;
+
+	@Value("${google.bucket-name}")
+	private String bucketName;
 
 	@Transactional
 	@Override
@@ -130,26 +138,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public String addImage(MultipartFile file) {
-		try {
-			return uploadFile(file, Constants.GOOGLE_CLOUD_BUCKET_NAME);
-		} catch (IOException e) {
-			return null;
-		}
+		return uploadFile(file, bucketName);
 	}
 
-	@SuppressWarnings("deprecation")
-	public String uploadFile(MultipartFile file, final String bucketName) throws IOException {
-		Credentials credentials = GoogleCredentials.fromStream(
-				new FileInputStream(new File("src/main/resources/tfg-kubernetes-250608-a841bb3c5abe.json")));
+	public String uploadFile(MultipartFile file, final String bucketName) {
+		Credentials credentials;
+		try {
+			credentials = GoogleCredentials.fromStream(new FileInputStream(new File(credentialsPath)));
+			Storage storage = StorageOptions.newBuilder().setCredentials(credentials).setProjectId(projectId).build()
+					.getService();
 
-		Storage storage = StorageOptions.newBuilder().setCredentials(credentials)
-				.setProjectId(Constants.GOOGLE_CLOUD_PROJECT_ID).build().getService();
+			BlobId blobId = BlobId.of(bucketName, file.getOriginalFilename());
+			BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
+			Blob blob = storage.create(blobInfo, file.getBytes());
 
-		BlobInfo blobInfo = storage.create(BlobInfo.newBuilder(bucketName, file.getName())
-				.setAcl(new ArrayList<>(
-						Collections.singletonList(Acl.of(com.google.cloud.storage.Acl.User.ofAllUsers(), Role.READER))))
-				.build(), file.getInputStream());
-
-		return blobInfo.getMediaLink();
+			return blob.getMediaLink();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

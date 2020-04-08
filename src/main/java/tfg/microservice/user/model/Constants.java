@@ -22,7 +22,4 @@ public final class Constants {
 	public static final String TEMPLATE_PARAM_FULLNAME = "fullName";
 
 	public static final String TEMPLATE_USER_REGISTERED = "Se ha completado el registro para el usuario {{fullName}}.";
-
-	public static final String GOOGLE_CLOUD_PROJECT_ID = "tfg-kubernetes-250608";
-	public static final String GOOGLE_CLOUD_BUCKET_NAME = "tfg-images";
 }
