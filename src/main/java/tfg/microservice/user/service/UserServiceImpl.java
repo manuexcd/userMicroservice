@@ -9,6 +9,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -53,6 +55,8 @@ public class UserServiceImpl implements UserService {
 	@Value("${google.bucket-name}")
 	private String bucketName;
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
 	@Transactional
 	@Override
 	public User registerNewUserAccount(User user) throws EmailExistsException {
@@ -65,6 +69,9 @@ public class UserServiceImpl implements UserService {
 		user.setConfirmed(Boolean.FALSE);
 		Map<Object, Object> params = new HashMap<>();
 		params.put(Constants.TEMPLATE_PARAM_FULLNAME, user.getFullName());
+		params.put(Constants.TEMPLATE_PARAM_PHONE, user.getPhone());
+		params.put(Constants.TEMPLATE_PARAM_EMAIL, user.getEmail());
+		params.put(Constants.TEMPLATE_PARAM_ADDRESS, user.getAddress());
 		mailSender.sendEmail(user.getEmail(), Constants.SUBJECT_USER_REGISTERED, Constants.TEMPLATE_USER_REGISTERED,
 				params);
 		return repository.save(user);
@@ -126,10 +133,14 @@ public class UserServiceImpl implements UserService {
 			userToUpdate.setPhone(user.getPhone());
 			userToUpdate.setEmail(user.getEmail());
 			userToUpdate.setAddress(user.getAddress());
+			userToUpdate.setImageUrl(user.getImageUrl());
 			Map<Object, Object> params = new HashMap<>();
 			params.put(Constants.TEMPLATE_PARAM_FULLNAME, userToUpdate.getFullName());
-			mailSender.sendEmail(userToUpdate.getEmail(), Constants.SUBJECT_USER_REGISTERED,
-					Constants.TEMPLATE_USER_REGISTERED, params);
+			params.put(Constants.TEMPLATE_PARAM_PHONE, userToUpdate.getPhone());
+			params.put(Constants.TEMPLATE_PARAM_EMAIL, userToUpdate.getEmail());
+			params.put(Constants.TEMPLATE_PARAM_ADDRESS, userToUpdate.getAddress());
+			mailSender.sendEmail(userToUpdate.getEmail(), Constants.SUBJECT_USER_UPDATED,
+					Constants.TEMPLATE_USER_UPDATED, params);
 			return repository.save(userToUpdate);
 		} else {
 			throw new UserNotFoundException();
@@ -141,7 +152,7 @@ public class UserServiceImpl implements UserService {
 		return uploadFile(file, bucketName);
 	}
 
-	public String uploadFile(MultipartFile file, final String bucketName) {
+	private String uploadFile(MultipartFile file, final String bucketName) {
 		Credentials credentials;
 		try {
 			credentials = GoogleCredentials.fromStream(new FileInputStream(new File(credentialsPath)));
@@ -154,7 +165,7 @@ public class UserServiceImpl implements UserService {
 
 			return blob.getMediaLink();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.debug("IOException", e);
 		}
 		return null;
 	}

@@ -117,6 +117,13 @@
 			<artifactId>jacoco-maven-plugin</artifactId>
 			<version>0.8.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.simplify4u</groupId>
+			<artifactId>slf4j-mock</artifactId>
+			<version>1.0.0</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

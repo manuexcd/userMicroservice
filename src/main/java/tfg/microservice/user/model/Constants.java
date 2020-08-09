@@ -18,8 +18,17 @@ public final class Constants {
 	public static final String PARAM = "/{param}";
 
 	public static final String SUBJECT_USER_REGISTERED = "Registro completado";
+	public static final String SUBJECT_USER_UPDATED = "Perfil de usuario actualizado";
 
 	public static final String TEMPLATE_PARAM_FULLNAME = "fullName";
+	public static final String TEMPLATE_PARAM_PHONE = "phone";
+	public static final String TEMPLATE_PARAM_EMAIL = "email";
+	public static final String TEMPLATE_PARAM_ADDRESS = "address";
 
-	public static final String TEMPLATE_USER_REGISTERED = "Se ha completado el registro para el usuario {{fullName}}.";
+	public static final String TEMPLATE_USER_REGISTERED = "Se ha completado el registro para el usuario {{ fullName }}. Los datos del usuario son:\n"
+			+ "\t Nombre: {{ fullName }}\n" + "\t Teléfono: {{ phone }}\n" + "\t Email: {{ email }}\n"
+			+ "\t Dirección: {{ address }}";
+	public static final String TEMPLATE_USER_UPDATED = "Se ha actualizado el perfil del usuario {{ fullName }}.\n"
+			+ "Los nuevos datos del usuario son:\n" + "\t Nombre: {{ fullName }}\n" + "\t Teléfono: {{ phone }}\n"
+			+ "\t Email: {{ email }}\n" + "\t Dirección: {{ address }}";
 }
