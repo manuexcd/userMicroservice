@@ -1,5 +1,7 @@
 package tfg.microservice.user;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -7,7 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 class UserApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void main() {
+		UserApplication.main(new String[] {});
+		assertTrue(true);
 	}
 
+	@Test
+	void contextLoads() {
+		assertTrue(true);
+	}
 }

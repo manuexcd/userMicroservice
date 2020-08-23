@@ -12,14 +12,19 @@ import static org.mockito.BDDMockito.given;
 
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.simplify4u.sjf4jmock.LoggerMock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import tfg.microservice.user.exception.EmailExistsException;
 import tfg.microservice.user.exception.UserNotFoundException;
@@ -43,6 +48,11 @@ public class UserServiceTest {
 	private UserServiceImpl service;
 
 	private Pageable pageRequest;
+
+	@Before
+	public void setup() {
+		LoggerMock.clearInvocations();
+	}
 
 	@Test
 	public void testRegisterNewUserAccount() throws EmailExistsException {
@@ -155,5 +165,23 @@ public class UserServiceTest {
 		user.setId(1);
 		given(dao.findById(anyLong())).willReturn(Optional.ofNullable(null));
 		assertNotNull(service.updateUser(user));
+	}
+
+	@Test
+	public void testAddImage() {
+		MockMultipartFile file = new MockMultipartFile("data", "filename.jpg", MediaType.MULTIPART_FORM_DATA_VALUE,
+				"some xml".getBytes());
+		ReflectionTestUtils.setField(service, "credentialsPath", "src/main/resources/google-credentials.json");
+		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
+		assertNotNull(service.addImage(file));
+	}
+
+	@Test
+	public void testAddImageException() {
+		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
+				"some xml".getBytes());
+		ReflectionTestUtils.setField(service, "credentialsPath", "");
+		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
+		assertNull(service.addImage(file));
 	}
 }

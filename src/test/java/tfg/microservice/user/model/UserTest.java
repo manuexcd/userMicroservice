@@ -20,6 +20,12 @@ public class UserTest {
 		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña");
 		assertNotNull(user);
 	}
+	
+	@Test
+	public void constructor3() {
+		User user = new User("nombre", "apellidos", "direccion", "telefono", "email", "contraseña", "url");
+		assertNotNull(user);
+	}
 
 	@Test
 	public void getFullName() {

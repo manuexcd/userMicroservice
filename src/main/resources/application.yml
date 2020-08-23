@@ -1,56 +1,31 @@
 spring:
-  application:
-    name: tfg
-  mail:
-     host: smtp.gmail.com
-     port: 587
-     username: manuexcd
-     password: vnhfonbmhfilsfac
-     properties:
-        mail:
-           smtp:
-              auth: true
-              starttls:
-                 enable: true
-                 required: true
-  jpa:
-    #show-sql: true
-    database: mysql
-    hibernate:
-      ddl-auto: update
-      dialect: org.hibernate.dialect.MySQL5Dialect
-  datasource:
-    url: jdbc:mysql://localhost:3306/userMicroservice?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: tfg
-    password: tfg
+   application:
+      name: userMicroservice
+   mail:
+      host: smtp.gmail.com
+      port: 587
+      username: manuexcd
+      password: vnhfonbmhfilsfac
+      properties:
+         mail:
+            smtp:
+               auth: true
+               starttls:
+                  enable: true
+                  required: true
+   jpa:
+      database: mysql
+      hibernate:
+         ddl-auto: update
+         dialect: org.hibernate.dialect.MySQL5Dialect
+   datasource:
+      url: jdbc:mysql://localhost:3306/user_microservice?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      username: tfg
+      password: tfg
 server:
-  port: 8080
-  ssl:
-    enabled: true
-    key-password: password
-    key-store: classpath:keystore.jks
-    key-store-password: password
----
-spring:
-  profiles: docker
-  jpa:
-    database: mysql
-    hibernate:
-      ddl-auto: update
-      dialect: org.hibernate.dialect.MySQL5Dialect
-  datasource:
-    url: jdbc:mysql://mysql:3306/tfg?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: docker
-    password: docker
----
-spring:
-  profiles: kubernetes
-  jpa:
-    database: mysql
-    hibernate:
-      ddl-auto: update
-      dialect: org.hibernate.dialect.MySQL5Dialect
-  datasource:
-    url: jdbc:mysql://mysql:3306/tfg?autoReconnect=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: docker
-    password: docker
+   port: 8080
+google:
+   bucket-name: "tfg-images-gcp"
+   credentials:
+      path: "src/main/resources/google-credentials.json"
+      

@@ -18,7 +18,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,7 +98,7 @@ public class UserControllerTest {
 		String body = "{\n	\"email\":\"user\",\n	\"password\":\"pass\"\n}";
 		given(service.registerNewUserAccount(any())).willReturn(user);
 		given(mapper.mapDtoToEntity(any())).willReturn(user);
-		mvc.perform(post("/users/signin").content(body).contentType(APPLICATION_JSON))
+		mvc.perform(post("/users/register").content(body).contentType(APPLICATION_JSON))
 				.andExpect(status().is2xxSuccessful());
 	}
 
@@ -107,7 +110,7 @@ public class UserControllerTest {
 		user.setSurname("surname");
 		String body = "{\n	\"email\":\"manuexcd@gmail.com\",\n	\"password\":\"pass\"\n}";
 		given(service.registerNewUserAccount(any())).willThrow(EmailExistsException.class);
-		mvc.perform(post("/users/signin").content(body).contentType(APPLICATION_JSON))
+		mvc.perform(post("/users/register").content(body).contentType(APPLICATION_JSON))
 				.andExpect(status().is5xxServerError());
 	}
 
@@ -135,5 +138,14 @@ public class UserControllerTest {
 		given(service.getUser(anyLong())).willThrow(UserNotFoundException.class);
 		mvc.perform(put("/users/1").content(obj.writeValueAsString(new UserDTO())).contentType(APPLICATION_JSON))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void testUploadImage() throws Exception {
+		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
+				"some xml".getBytes());
+		given(service.addImage(any())).willReturn(anyString());
+		mvc.perform(MockMvcRequestBuilders.multipart("/users/image").file("file", file.getBytes()))
+				.andExpect(status().isOk());
 	}
 }
