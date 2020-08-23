@@ -1,12 +1,13 @@
 package tfg.microservice.user.service;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletException;
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -19,10 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.Blob;
-import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
@@ -48,9 +46,6 @@ public class UserServiceImpl implements UserService {
 
 	@Value("${google.credentials.path}")
 	private String credentialsPath;
-
-	@Value("${google.project-id}")
-	private String projectId;
 
 	@Value("${google.bucket-name}")
 	private String bucketName;
@@ -153,20 +148,32 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private String uploadFile(MultipartFile file, final String bucketName) {
-		Credentials credentials;
 		try {
-			credentials = GoogleCredentials.fromStream(new FileInputStream(new File(credentialsPath)));
-			Storage storage = StorageOptions.newBuilder().setCredentials(credentials).setProjectId(projectId).build()
-					.getService();
+			checkFileExtension(file.getOriginalFilename());
+			final String fileName = System.currentTimeMillis() + file.getOriginalFilename();
 
-			BlobId blobId = BlobId.of(bucketName, file.getOriginalFilename());
-			BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
-			Blob blob = storage.create(blobInfo, file.getBytes());
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+					.createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+			Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
 
-			return blob.getMediaLink();
-		} catch (IOException e) {
+			BlobInfo blobInfo = storage.create(BlobInfo.newBuilder(bucketName, fileName).build(), file.getBytes());
+
+			return blobInfo.getMediaLink();
+		} catch (IOException | ServletException e) {
 			LOGGER.debug("IOException", e);
 		}
 		return null;
+	}
+
+	private void checkFileExtension(String fileName) throws ServletException {
+		if (fileName != null && !fileName.isEmpty() && fileName.contains(".")) {
+			String[] allowedExt = { ".jpg", ".jpeg", ".png", ".gif" };
+			for (String ext : allowedExt) {
+				if (fileName.endsWith(ext)) {
+					return;
+				}
+			}
+			throw new ServletException("file must be an image");
+		}
 	}
 }

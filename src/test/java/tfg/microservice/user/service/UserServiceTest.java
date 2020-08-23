@@ -169,10 +169,10 @@ public class UserServiceTest {
 
 	@Test
 	public void testAddImage() {
-		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
+		MockMultipartFile file = new MockMultipartFile("data", "filename.jpg", MediaType.MULTIPART_FORM_DATA_VALUE,
 				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsPath", "src/test/resources/google-credentials.json");
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images");
+		ReflectionTestUtils.setField(service, "credentialsPath", "src/main/resources/google-credentials.json");
+		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
 		assertNotNull(service.addImage(file));
 	}
 
@@ -181,7 +181,7 @@ public class UserServiceTest {
 		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
 				"some xml".getBytes());
 		ReflectionTestUtils.setField(service, "credentialsPath", "");
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images");
+		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
 		assertNull(service.addImage(file));
 	}
 }

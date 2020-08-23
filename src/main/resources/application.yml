@@ -14,7 +14,6 @@ spring:
                   enable: true
                   required: true
    jpa:
-#show-sql: true
       database: mysql
       hibernate:
          ddl-auto: update
@@ -25,14 +24,8 @@ spring:
       password: tfg
 server:
    port: 8080
-   ssl:
-      enabled: false
-      key-password: password
-      key-store: classpath:keystore.jks
-      key-store-password: password
 google:
-   project-id: "tfg-kubernetes-250608"
-   bucket-name: "tfg-images"
+   bucket-name: "tfg-images-gcp"
    credentials:
       path: "src/main/resources/google-credentials.json"
       
