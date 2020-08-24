@@ -26,6 +26,6 @@ server:
    port: 8080
 google:
    bucket-name: "tfg-images-gcp"
-   credentials:
-      path: "src/main/resources/google-credentials.json"
+   credentials: 'test'
+      
       

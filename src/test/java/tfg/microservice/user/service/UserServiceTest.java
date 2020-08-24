@@ -10,6 +10,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -168,10 +171,11 @@ public class UserServiceTest {
 	}
 
 	@Test
-	public void testAddImage() {
+	public void testAddImage() throws IOException {
 		MockMultipartFile file = new MockMultipartFile("data", "filename.jpg", MediaType.MULTIPART_FORM_DATA_VALUE,
 				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsPath", "src/main/resources/google-credentials.json");
+		ReflectionTestUtils.setField(service, "credentialsContent",
+				new String(Files.readAllBytes(Paths.get("src/test/resources/google-credentials.json"))));
 		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
 		assertNotNull(service.addImage(file));
 	}
@@ -180,7 +184,7 @@ public class UserServiceTest {
 	public void testAddImageException() {
 		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
 				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsPath", "");
+		ReflectionTestUtils.setField(service, "credentialsContent", "");
 		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
 		assertNull(service.addImage(file));
 	}

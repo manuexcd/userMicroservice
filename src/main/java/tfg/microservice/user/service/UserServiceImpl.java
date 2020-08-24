@@ -1,6 +1,6 @@
 package tfg.microservice.user.service;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private MailSender mailSender;
 
-	@Value("${google.credentials.path}")
-	private String credentialsPath;
+	@Value("${google.credentials}")
+	private String credentialsContent;
 
 	@Value("${google.bucket-name}")
 	private String bucketName;
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
 			checkFileExtension(file.getOriginalFilename());
 			final String fileName = System.currentTimeMillis() + file.getOriginalFilename();
 
-			GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(credentialsPath))
+			GoogleCredentials credentials = GoogleCredentials.fromStream(new ByteArrayInputStream(credentialsContent.getBytes()))
 					.createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
 			Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
 
