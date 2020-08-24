@@ -18,7 +18,5 @@ spring:
                  required: true
          
 google:
-   project-id: "test"
    bucket-name: "test"
-   credentials:
-      path: "src/main/resources/test.json"
+   credentials: "src/main/resources/test.json"
