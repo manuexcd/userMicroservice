@@ -10,9 +10,6 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -24,10 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.simplify4u.sjf4jmock.LoggerMock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import tfg.microservice.user.exception.EmailExistsException;
 import tfg.microservice.user.exception.UserNotFoundException;
@@ -168,24 +162,5 @@ public class UserServiceTest {
 		user.setId(1);
 		given(dao.findById(anyLong())).willReturn(Optional.ofNullable(null));
 		assertNotNull(service.updateUser(user));
-	}
-
-	@Test
-	public void testAddImage() throws IOException {
-		MockMultipartFile file = new MockMultipartFile("data", "filename.jpg", MediaType.MULTIPART_FORM_DATA_VALUE,
-				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsContent",
-				new String(Files.readAllBytes(Paths.get("src/test/resources/google-credentials.json"))));
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
-		assertNotNull(service.addImage(file));
-	}
-
-	@Test
-	public void testAddImageException() {
-		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
-				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsContent", "");
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
-		assertNull(service.addImage(file));
 	}
 }
