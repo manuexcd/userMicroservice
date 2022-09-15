@@ -1,0 +1,16 @@
+name: build
+on: [push]
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.5.0
+        with:
+          java-version: 8
+      - name: Setup Maven
+        run: apt install maven
+      - name: Build docker image
+        run: mvn clean dockerfile:build
