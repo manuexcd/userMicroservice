@@ -169,23 +169,4 @@ public class UserServiceTest {
 		given(dao.findById(anyLong())).willReturn(Optional.ofNullable(null));
 		assertNotNull(service.updateUser(user));
 	}
-
-	@Test
-	public void testAddImage() throws IOException {
-		MockMultipartFile file = new MockMultipartFile("data", "filename.jpg", MediaType.MULTIPART_FORM_DATA_VALUE,
-				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsContent",
-				new String(Files.readAllBytes(Paths.get("src/test/resources/google-credentials.json"))));
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
-		assertNotNull(service.addImage(file));
-	}
-
-	@Test
-	public void testAddImageException() {
-		MockMultipartFile file = new MockMultipartFile("data", "filename.txt", MediaType.MULTIPART_FORM_DATA_VALUE,
-				"some xml".getBytes());
-		ReflectionTestUtils.setField(service, "credentialsContent", "");
-		ReflectionTestUtils.setField(service, "bucketName", "tfg-images-gcp");
-		assertNull(service.addImage(file));
-	}
 }
