@@ -16,7 +16,9 @@ jobs:
       - name: Docker Setup Buildx
         uses: docker/setup-buildx-action@v2.0.0
       - name: Build docker image
-        run: mvn clean package
+        run: mvn clean package --quiet
+      - name: list files
+        run: ls
       - name: Build and push Docker images
         uses: docker/build-push-action@v3.1.1
         with:
