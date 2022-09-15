@@ -12,6 +12,6 @@ jobs:
           java-version: 8
           distribution: zulu
       - name: Setup Maven
-        run: apt install maven
+        run: sudo apt install maven
       - name: Build docker image
         run: mvn clean dockerfile:build
