@@ -10,6 +10,7 @@ jobs:
         uses: actions/setup-java@v3.5.0
         with:
           java-version: 8
+          distribution: zulu
       - name: Setup Maven
         run: apt install maven
       - name: Build docker image
