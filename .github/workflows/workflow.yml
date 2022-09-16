@@ -28,3 +28,4 @@ jobs:
           file: Dockerfile
           context: .
           push: true
+          tags: manuexcd/userMicroservice:github-actions
